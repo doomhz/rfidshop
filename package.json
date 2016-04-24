@@ -1,0 +1,14 @@
+{
+  "name": "rfidshop",
+  "version": "1.0.0",
+  "main": "app.js",
+  "dependencies": {
+    "restify": "latest",
+    "date-utils": "latest",
+    "coffee-script": "latest",
+    "underscore": "latest",
+    "fs-extra": "latest",
+    "restify": "latest",
+    "serialport": "latest"
+  }
+}
