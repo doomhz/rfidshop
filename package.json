@@ -19,7 +19,8 @@
     "errorhandler": "latest",
     "pug": "latest",
     "stylus": "latest",
-    "mathjs": "latest"
+    "mathjs": "latest",
+    "socket.io": "latest"
   },
   "devDependencies": {
 

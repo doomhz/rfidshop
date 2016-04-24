@@ -57,6 +57,8 @@ if (environment === "production") {
 
 var server = http.createServer(app);
 
+GLOBAL.io = require("./lib/sockets")(server);
+
 server.listen(app.get('port'), function(){
   console.log("RFID Shop is running on port " + app.get("port") + " in " + app.settings.env + " mode", "info");
 });

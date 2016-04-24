@@ -44,6 +44,8 @@ class RFIDReader
 
   testSendTime: 1000
 
+  readingInProgress: false
+
   constructor: (opts)->
     @port = opts.port if opts.port
     @baudRate = opts.baudRate if opts.baudRate?
@@ -93,12 +95,18 @@ class RFIDReader
               @[@dataFilterCallbackName] _.sample testData
             , @testSendTime
         callback()
+      @readingInProgress = true
     catch e
       callback e
+      @readingInProgress = false
 
   stop: (callback = ->)->
     clearInterval testSendInterval  if testSendInterval
     @socket.close callback
+    @readingInProgress = false
+
+  isStarted: ->
+    @readingInProgress
 
   onReadAllRaw: (data)=>
     @onRead data.toString()
