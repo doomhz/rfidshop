@@ -1,39 +1,33 @@
 extends ../main.pug
 
 block content
-  h1 Reader
+  #rfid-reader-log-wrapper
+    .page-header
+      h1 Reader
+    .row
+      .col-sm-6
+        .panel.panel-default
+          .panel-heading
+            | Settings
+          .panel-body
+            .form-group
+              label Status: <span id="reader-status" class="label label-default"></span>
+            .form-group
+              label Device port:
+              input#device-port.form-control
+            .form-group
+              label Data filter: 
+              select#data-filter.form-control
+                option(value="ids") RFIDs
+                option(value="hex") HEX data
+                option(value="ascii") ASCII data
+                option(value="raw") Raw data
+            .form-group
+              button#toggle-reading-bt.btn.btn-lg.btn-default Start/stop reader
 
-  p
-    | Status: <span id="reader-status"></span>
-  p
-    | Device port: <input type="text" id="device-port">
-  p
-    | Data filter: 
-    <select id="data-filter">
-      <option value="ids">RFIDs</option>
-      <option value="hex">HEX data</option>
-      <option value="ascii">ASCII data</option>
-      <option value="raw">Raw data</option>
-    </select>
-  
-  button#toggle-reading-bt Start/stop reader
-
-  h2 RFID Reader log:
-  <ul id="rfidreader-log" style="height: 300px;overflow-y: scroll;">
-  </ul>
-
-  script.
-    var socket = io.connect('http://localhost:5000');
-    socket.on('rfidreader_data', function (data) {
-      var now = new Date();
-      $("#rfidreader-log").prepend("<li>" + "[" + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds() + "] " + JSON.stringify(data) + "</li>");
-    });
-    socket.on('rfidreader_info', function (info) {
-      $("#reader-status").text(info.status);
-      if (info.port) $("#device-port").val(info.port);
-      if (info.dataFilter) $("#data-filter").val(info.dataFilter);
-    });
-
-    $("#toggle-reading-bt").click(function () {
-      socket.emit('rfidreader_toggle', {port: $("#device-port").val(), dataFilter: $("#data-filter").val()});
-    });
+      .col-sm-6
+        .panel.panel-default
+          .panel-heading
+            | Logs
+          .panel-body
+            ul#rfidreader-log
