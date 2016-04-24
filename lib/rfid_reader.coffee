@@ -1,5 +1,5 @@
-SerialPort = require('serialport').SerialPort
-_                       = require "underscore"
+SerialPort = require("serialport").SerialPort
+_          = require "underscore"
 
 # Tag example: ccffff1132010e0130396062439ad180000caccb23
 # prefix: ccffff1132010e01 length: 16
@@ -11,6 +11,14 @@ INPUT_BUFFER_LIMIT = 10000
 
 inputBuffer = ""
 idRegExp = undefined
+testSendInterval = undefined
+testData = [
+  "sadsadasdccffff1132010e0130396062439ad180000caccb23wadasdsadasdsadsadweqdadccffff1132010e0130396062439ad180000caccb23wewdsadasd"
+  "dsdaddasccffff1132010e013039606246666666666caccb23sdasdasdasdccffff1132010e013039606246666666666caccb23sdasdsadsadasdsd"
+  "aaaaaccffff1132010e013039606247777777777caccb23sdssfsdfccffff1132010e013039606247777777777caccb23dfdgfdgdfgccffff1132010e013039606247777777777caccb23"
+  "sasaccffff1132010e013039606248888888888caccb23sdasdsaasdccffff1132010e013039606248888888888caccb23asdasdd"
+  "sdadasccffff1132010e013039606249999999999caccb23sdasdsadsadccffff1132010e013039606249999999999caccb23asdsadasccffff1132010e013039606249999999999caccb23asdsadsadccffff1132010e013039606249999999999caccb23asdsad"
+]
 
 class RFIDReader
 
@@ -30,41 +38,67 @@ class RFIDReader
 
   dataFilter: "ids"
 
+  dataFilterCallbackName: null
+
+  testMode: false
+
+  testSendTime: 1000
+
   constructor: (opts)->
     @port = opts.port if opts.port
     @baudRate = opts.baudRate if opts.baudRate?
     @dataBits = opts.dataBits if opts.dataBits?
     @bufferSize = opts.bufferSize if opts.bufferSize?
     @dataFilter = opts.dataFilter if opts.dataFilter?
+    @testMode = opts.testMode if opts.testMode?
+    @testSendTime = opts.testSendTime if opts.testSendTime?
     @onOpen = opts.onOpen if opts.onOpen
     @onRead = opts.onRead if opts.onRead
     @onError = opts.onError if opts.onError
-    @onDisconnect = opts.onDisconnect if opts.onDisconnect
-    idRegExp = new RegExp "#{@dataPrefix}([a-b0-9]).{0,24}#{@dataPostfix}", "g"
+    @onDisconnect = opts.onDisconnect if opts.onDisconnect    
 
   getDeviceOptions: ->
     baudRate: @baudRate
     dataBits: @dataBits
     bufferSize: @bufferSize
 
+  setupDataFilter: ->
+    if @dataFilter is "ids"
+      idRegExp = new RegExp "#{@dataPrefix}([a-b0-9]).{0,24}#{@dataPostfix}", "g"
+      @dataFilterCallbackName = "onReadIDs"
+    else if @dataFilter is "hex"
+      @dataFilterCallbackName = "onReadAllHex"
+    else if @dataFilter is "ascii"
+      @dataFilterCallbackName = "onReadAllAscii"
+    else
+      @dataFilterCallbackName = "onReadAllRaw"
+
   start: (callback = ->)->
     try
       if not @socket
+        @setupDataFilter()
         @socket = new SerialPort @port, @getDeviceOptions(), false
         @socket.on "open", @onOpen
         @socket.on "error", @onError
         @socket.on "disconnect", @onDisconnect
-        if @dataFilter is "ids"
-          @socket.on "data", @onReadIDs
-        else if @dataFilter is "hex"
-          @socket.on "data", @onReadAllHex
-        else if @dataFilter is "ascii"
-          @socket.on "data", @onReadAllAscii
+        @socket.on "data", @[@dataFilterCallbackName]
+      if not @testMode
+        if not @socket.isOpen()
+          @socket.open callback
         else
-          @socket.on "data", @onReadAllRaw
-      @socket.open()  if not @socket.isOpen()
+          callback()
+      else
+        if @testSendTime
+          testSendInterval = setInterval =>
+              @[@dataFilterCallbackName] _.sample testData
+            , @testSendTime
+        callback()
     catch e
       callback e
+
+  stop: (callback = ->)->
+    clearInterval testSendInterval  if testSendInterval
+    @socket.close callback
 
   onReadAllRaw: (data)=>
     @onRead data.toString()
@@ -84,7 +118,8 @@ class RFIDReader
     @clearBuffer()
 
   findBufferIds: ->
-    _.uniq inputBuffer.match idRegExp
+    _.map _.uniq inputBuffer.match idRegExp, (id)->
+      _.rtrim _.ltrim(id, @dataPrefix), @dataPostfix
 
   clearBuffer: ()->
     inputBuffer.substr -INPUT_BUFFER_LIMIT  if inputBuffer.length > INPUT_BUFFER_LIMIT
