@@ -1,0 +1,20 @@
+{
+  "development" : {
+    "app_url": "http://localhost:5000",
+    "app_host": "localhost:5000",
+    "session": {
+      "cookie_secret": "secretkey",
+      "session_key": "rfidshop",
+      "cookie": {
+        "maxAge": 2592000000,
+        "path": "/",
+        "httpOnly": true,
+        "secure": false
+      }
+    }
+  },
+  "test" : {
+  },
+  "production" : {
+  }
+}

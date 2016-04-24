@@ -3,12 +3,25 @@
   "version": "1.0.0",
   "main": "app.js",
   "dependencies": {
-    "restify": "latest",
-    "date-utils": "latest",
+    "fs-extra": "latest",
+    "serialport": "latest",
     "coffee-script": "latest",
     "underscore": "latest",
-    "fs-extra": "latest",
-    "restify": "latest",
-    "serialport": "latest"
+    "underscore.string": "latest",
+    "date-utils": "1.2.16",
+    "async": "1.5.2",
+    
+    "express": "latest",
+    "body-parser": "latest",
+    "method-override": "latest",
+    "cookie-parser": "latest",
+    "compression": "latest",
+    "errorhandler": "latest",
+    "pug": "latest",
+    "stylus": "latest",
+    "mathjs": "latest"
+  },
+  "devDependencies": {
+
   }
 }
