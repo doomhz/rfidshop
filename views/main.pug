@@ -15,9 +15,8 @@ html(lang='en')
     include ./_config.pug
   
   body(role="document")
-    include ./site/_header.pug
-    .container.theme-showcase(role="main")
-      block content
+    #app
+        block content
     
     include ./_scripts.pug
     

@@ -43,6 +43,7 @@ app.use(function(err, req, res, next) {
 
 // Routes
 require('./routes/site')(app);
+require('./routes/products')(app);
 require('./routes/reader')(app);
 require('./routes/errors')(app);
 

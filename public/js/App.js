@@ -1,11 +1,11 @@
+import App from './App';
+
 import React from 'react'
 import ReactDOM from 'react-dom'
-import RFIDReader from './RFIDReader';
+import {Router, browserHistory} from 'react-router'
+import routes from './config/routes'
 
-class App extends React.Component {
-  render(){
-    return <RFIDReader />
-  }
-}
-
-if (document.getElementById('app')) ReactDOM.render(<App />, document.getElementById('app'))
+ReactDOM.render(
+  <Router history={browserHistory}>{routes}</Router>,
+  document.getElementById('app')
+)

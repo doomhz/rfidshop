@@ -3,7 +3,7 @@ module.exports = {
   host: "0.0.0.0",
   entry: {
     main: [
-      "./public/js/main.js"
+      "./public/js/App.js"
     ]
   },
   output: {
