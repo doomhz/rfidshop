@@ -8,11 +8,11 @@ class Products extends React.Component {
     super()
     this.state = {
       products: [],
-      currentPage: 22,
-      pageSize: 10,
+      currentPage: 1,
+      pageSize: 2,
       plural: "products",
       singular: "product",
-      total: 1000,
+      total: 0,
       limit: 10,
       error: "",
       info: ""
@@ -22,12 +22,15 @@ class Products extends React.Component {
     this.loadProducts()
   }
   loadProducts(){
-    ProductModel.getAll()
+    ProductModel.getAll(this.state.currentPage, this.state.pageSize)
     .then(this.afterProductsLoad.bind(this))
     .catch(this.onProductsLoadError.bind(this))
   }
   afterProductsLoad(response){
-    this.setState({products: response.data})
+    this.setState({
+      products: response.data.products,
+      total: response.data.total
+    })
   }
   onProductsLoadError(response){
     this.setState({error: response.data.error})
@@ -52,8 +55,9 @@ class Products extends React.Component {
       .catch(this.onProductDeleteError.bind(this))
     }
   }
-  handlePageSelect(){
-
+  handlePageSelect(page){
+    this.state.currentPage = page
+    this.loadProducts()
   }
   render(){
     return (
@@ -86,7 +90,7 @@ class Products extends React.Component {
         </table>
         <Pagination
           currentPage={this.state.currentPage}
-          onPageSelect={this.handlePageSelect}
+          onPageSelect={this.handlePageSelect.bind(this)}
           pageSize={this.state.pageSize}
           plural={this.state.plural}
           singular={this.state.singular}

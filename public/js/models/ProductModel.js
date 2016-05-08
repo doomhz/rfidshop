@@ -7,8 +7,8 @@ class ProductModel {
   static get(pId){
     return axios.get(`/products/${pId}`)
   }
-  static getAll(){
-    return axios.get(`/products`)
+  static getAll(page, limit){
+    return axios.get(`/products/${page}/${limit}`)
   }
   static delete(pId){
     return axios.delete(`/products/${pId}`)

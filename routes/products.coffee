@@ -14,8 +14,15 @@ module.exports = (app)->
     return next()  if /application\/json/.test(req.get('accept'))
     res.render "site/index"
 
-  app.get "/products", (req, res)->
-    res.json products
+  app.get "/products/:page/:count", (req, res)->
+    page = parseInt req.params.page
+    count = parseInt req.params.count
+    totalPages = Math.ceil products.length / count
+    startPageIndex = if page is 1 then 0 else (page - 1) * count
+    endPageIndex = startPageIndex + count
+    res.json
+      total: products.length
+      products: products.slice startPageIndex, endPageIndex
 
   app.get "/products/:id", (req, res)->
     id = parseInt req.params.id
