@@ -1,6 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
+let socket = null
+
 class RFIDReader extends React.Component {
   constructor(){
     super()
@@ -35,15 +37,16 @@ class RFIDReader extends React.Component {
     this.$devicePort = ReactDOM.findDOMNode(this.refs.devicePort)
     this.$dataFilter = ReactDOM.findDOMNode(this.refs.dataFilter)
     this.$toggleReadingBt = ReactDOM.findDOMNode(this.refs.toggleReadingBt)
-    this.socket = io.connect('http://localhost:5000')
-    this.socket.on('rfidreader_data', this.onData.bind(this))
-    this.socket.on('rfidreader_info', this.onInfo.bind(this))
+    socket = io.connect('http://localhost:5000')
+    socket.on('rfidreader_data', this.onData.bind(this))
+    socket.on('rfidreader_info', this.onInfo.bind(this))
   }
   componentWillUnmount() {
-    this.socket.disconnect()
+    socket.disconnect()
+    socket = null
   }
   toggleReading(){
-    this.socket.emit('rfidreader_toggle', {port: this.$devicePort.value, dataFilter: this.$dataFilter.value})
+    socket.emit('rfidreader_toggle', {port: this.$devicePort.value, dataFilter: this.$dataFilter.value})
   }
   render(){
     return (

@@ -11,6 +11,7 @@ export default (
   <Route path="/" component={Main}>
     <IndexRoute component={Home} />
     <Route path="/add-product" component={Product} />
+    <Route path="/edit-product/:id" component={Product} />
     <Route path="/products" component={Products} />
     <Route path="/reader" component={RFIDReader} />
   </Route>
