@@ -1,5 +1,8 @@
 import React from 'react'
+import {Link} from 'react-router'
 import ProductModel from '../models/ProductModel'
+
+let socket = null
 
 class Product extends React.Component {
   constructor(props){
@@ -11,11 +14,18 @@ class Product extends React.Component {
         code: ""
       },
       error: "",
-      info: ""
+      info: "",
+      isScanning: false
     }
   }
   componentDidMount(){
     if (this.props.params.id) this.loadProduct(this.props.params.id)
+    socket = io.connect('http://localhost:5000')
+    socket.on('rfidreader_data', this.onSocketData.bind(this))
+  }
+  componentWillUnmount() {
+    socket.disconnect()
+    socket = null
   }
   loadProduct(pId){
     ProductModel.get(pId)
@@ -41,6 +51,11 @@ class Product extends React.Component {
     setTimeout(()=> this.setState({error: ""})
       , 3000)
   }
+  onSocketData(data) {
+    if (!this.state.isScanning) return;
+    this.state.product.code = data[0]
+    this.setState({product: this.state.product})
+  }
   handleNameChange(e) {
     this.state.product.name = e.target.value
     this.setState({product: this.state.product})
@@ -54,6 +69,10 @@ class Product extends React.Component {
     ProductModel.save(this.state.product)
     .then(this.afterProductSubmit.bind(this))
     .catch(this.onProductSubmitError.bind(this))
+  }
+  onToggleScan(e){
+    e.preventDefault()
+    this.setState({isScanning: !this.state.isScanning})
   }
   render(){
     let title = this.state.product.id ? "Edit product " + this.state.product.name : "Add product";
@@ -71,9 +90,16 @@ class Product extends React.Component {
           </div>
           <div className="form-group">
             <label for="name">Code</label>
-            <input type="text" value={this.state.product.code} onChange={this.handleCodeChange.bind(this)} className="form-control" placeholder="Code" />
+            <div className="row">
+              <div className="col-md-8 col-sm-8">
+                <input type="text" value={this.state.product.code} className="form-control" placeholder="Code" />
+              </div>
+              <div className="col-md-4 col-sm-4">
+                <button type="button" onClick={this.onToggleScan.bind(this)} className="btn btn-default btn-block">{this.state.isScanning ? "Stop" : "Scan"}</button>
+              </div>
+            </div>
           </div>
-          <button type="submit" className="btn btn-default">Save</button>
+          <button type="submit" className="btn btn-primary">Save</button> <Link className="btn btn-default" to={`/products`}>Back</Link>
         </form>
       </div>
     )

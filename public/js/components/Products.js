@@ -9,7 +9,7 @@ class Products extends React.Component {
     this.state = {
       products: [],
       currentPage: 1,
-      pageSize: 2,
+      pageSize: 10,
       plural: "products",
       singular: "product",
       total: 0,
@@ -68,7 +68,6 @@ class Products extends React.Component {
         <table className="table table-striped">
           <thead>
             <tr>
-              <th>ID</th>
               <th>Name</th>
               <th>Code</th>
               <th>Actions</th>
@@ -77,7 +76,6 @@ class Products extends React.Component {
           <tbody>
             {this.state.products.map((product, index) => (
               <tr key={index}>
-                <td>{product.id}</td>
                 <td>{product.name}</td>
                 <td>{product.code}</td>
                 <td>
