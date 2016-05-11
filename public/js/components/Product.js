@@ -43,6 +43,7 @@ class Product extends React.Component {
   afterProductSubmit(){
     if (!this.state.product.id) this.setState({product: {id: undefined, name: "", code: ""}})
     this.setState({info: "The product was saved successfully."})
+    this.setState({isScanning: false})
     setTimeout(()=> this.setState({info: ""})
       , 3000)
   }

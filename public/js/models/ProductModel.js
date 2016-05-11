@@ -7,6 +7,9 @@ class ProductModel {
   static get(pId){
     return axios.get(`/products/${pId}`)
   }
+  static getAvailableByCode(pCode){
+    return axios.get(`/products/available/${pCode}`)
+  }
   static getAll(page, limit){
     return axios.get(`/products/${page}/${limit}`)
   }

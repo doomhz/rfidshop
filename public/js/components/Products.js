@@ -70,6 +70,7 @@ class Products extends React.Component {
             <tr>
               <th>Name</th>
               <th>Code</th>
+              <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -78,6 +79,7 @@ class Products extends React.Component {
               <tr key={index}>
                 <td>{product.name}</td>
                 <td>{product.code}</td>
+                <td>{product.status}</td>
                 <td>
                   <Link className="btn btn-default" to={`/edit-product/${product.id}`}>Edit</Link><span> </span>
                   <button className="btn btn-danger" onClick={() => this.handleDelete(product.id)}>Delete</button>

@@ -13,6 +13,7 @@ class Main extends React.Component {
             <div id="navbar" className="navbar-collapse collapse">
               <ul className="nav navbar-nav">
                 <li><Link to="/products" activeClassName="active">Products</Link></li>
+                <li><Link to="/cart" activeClassName="active">Shopping cart</Link></li>
                 <li><Link to="/reader" activeClassName="active">Reader</Link></li>
               </ul>
             </div>

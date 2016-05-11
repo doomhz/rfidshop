@@ -11,6 +11,7 @@ INPUT_BUFFER_LIMIT = 10000
 
 inputBuffer = ""
 idRegExp = undefined
+idCleanerRegExp = undefined
 testSendInterval = undefined
 testData = [
   "sadsadasdccffff1132010e0130396062439ad180000caccb23wadasdsadasdsadsadweqdadccffff1132010e0130396062439ad180000caccb23wewdsadasd"
@@ -67,6 +68,7 @@ class RFIDReader
   setupDataFilter: ->
     if @dataFilter is "ids"
       idRegExp = new RegExp "#{@dataPrefix}([a-b0-9]).{0,24}#{@dataPostfix}", "g"
+      idCleanerRegExp = reg = new RegExp "(^#{@dataPrefix})|(#{@dataPostfix}$)", "g"
       @dataFilterCallbackName = "onReadIDs"
     else if @dataFilter is "hex"
       @dataFilterCallbackName = "onReadAllHex"
@@ -126,8 +128,8 @@ class RFIDReader
     @clearBuffer()
 
   findBufferIds: ->
-    _.map _.uniq inputBuffer.match idRegExp, (id)->
-      _.rtrim _.ltrim(id, @dataPrefix), @dataPostfix
+    _.map _.uniq(inputBuffer.match(idRegExp)), (id)->
+      id.replace(idCleanerRegExp, "")
 
   clearBuffer: ()->
     inputBuffer.substr -INPUT_BUFFER_LIMIT  if inputBuffer.length > INPUT_BUFFER_LIMIT
