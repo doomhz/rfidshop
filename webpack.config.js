@@ -1,5 +1,6 @@
 var path = require("path");
-module.exports = {
+var webpack = require("webpack");
+config = {
   host: "0.0.0.0",
   entry: {
     main: [
@@ -29,5 +30,26 @@ module.exports = {
   },
   watchOptions: {
     poll: 500
-  }
+  },
+  plugins:[
+  ]
 };
+
+if (process.env.NODE_ENV === "production") {
+  config.plugins.push(
+    new webpack.DefinePlugin({
+      'process.env':{
+        'NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+      }
+    })
+  );
+  config.plugins.push(
+    new webpack.optimize.UglifyJsPlugin({
+      compress:{
+        warnings: true
+      }
+    })
+  );
+}
+
+module.exports = config;
