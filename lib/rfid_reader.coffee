@@ -4,14 +4,15 @@ _          = require "underscore"
 # Tag example: ccffff1132010e0130396062439ad180000caccb23
 # prefix: ccffff1132010e01 length: 16
 # id: 30396062439ad180000caccb length: 24
-# postfix: 23 length: 2
+# postfix length: 2
 # total length: 42
 
 INPUT_BUFFER_LIMIT = 10000
 
 inputBuffer = ""
 idRegExp = undefined
-idCleanerRegExp = undefined
+idCleanerPreRegExp = undefined
+idCleanerPostRegExp = new RegExp "([a-bA-Z0-9]){2}$"
 testSendInterval = undefined
 testData = [
   "sadsadasdccffff1132010e0130396062439ad180000caccb23wadasdsadasdsadsadweqdadccffff1132010e0130396062439ad180000caccb23wewdsadasd"
@@ -34,8 +35,6 @@ class RFIDReader
   bufferSize: 65536
 
   dataPrefix: "ccffff1132010e01"
-
-  dataPostfix: "23"
 
   dataFilter: "ids"
 
@@ -67,8 +66,8 @@ class RFIDReader
 
   setupDataFilter: ->
     if @dataFilter is "ids"
-      idRegExp = new RegExp "#{@dataPrefix}([a-b0-9]).{0,24}#{@dataPostfix}", "g"
-      idCleanerRegExp = reg = new RegExp "(^#{@dataPrefix})|(#{@dataPostfix}$)", "g"
+      idRegExp = new RegExp "#{@dataPrefix}([a-bA-Z0-9]){26}", "g"
+      idCleanerPreRegExp = new RegExp "^#{@dataPrefix}"
       @dataFilterCallbackName = "onReadIDs"
     else if @dataFilter is "hex"
       @dataFilterCallbackName = "onReadAllHex"
@@ -129,7 +128,7 @@ class RFIDReader
 
   findBufferIds: ->
     _.map _.uniq(inputBuffer.match(idRegExp)), (id)->
-      id.replace(idCleanerRegExp, "")
+      id.replace(idCleanerPreRegExp, "").replace(idCleanerPostRegExp, "")
 
   clearBuffer: ()->
     inputBuffer.substr -INPUT_BUFFER_LIMIT  if inputBuffer.length > INPUT_BUFFER_LIMIT
