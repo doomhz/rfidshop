@@ -28,7 +28,7 @@ exports = module.exports = (server)->
               console.log "RFID Device is reading data"
             onRead: (data)->
               # console.log data
-              GLOBAL.io.emit "rfidreader_data", data  if data
+              GLOBAL.io.emit "rfidreader_data", data
             onError: (error)->
               console.error "RFID Device error:", error  if error
             onDisconnect: (error)->

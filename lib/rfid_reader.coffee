@@ -66,7 +66,7 @@ class RFIDReader
 
   setupDataFilter: ->
     if @dataFilter is "ids"
-      idRegExp = new RegExp "#{@dataPrefix}([a-bA-Z0-9]){26}", "g"
+      idRegExp = new RegExp "#{@dataPrefix}([a-zA-Z0-9]){26}", "g"
       idCleanerPreRegExp = new RegExp "^#{@dataPrefix}"
       @dataFilterCallbackName = "onReadIDs"
     else if @dataFilter is "hex"
@@ -121,7 +121,7 @@ class RFIDReader
   onReadIDs: (data)=>
     inputBuffer += data.toString("hex")
     ids = @findBufferIds()
-    if ids
+    if ids and ids.length
       inputBuffer = inputBuffer.replace idRegExp, ""
       @onRead ids
     @clearBuffer()
