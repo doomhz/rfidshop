@@ -21,7 +21,7 @@ exports = module.exports = (server)->
           rfidReader = new RFIDReader
             port: config.port
             dataFilter: config.dataFilter
-            testMode: true
+            testMode: process.env.NODE_ENV isnt "production"
             # testSendTime: false
             onOpen: (error)->
               return console.error "Can't open RFID port", error  if error

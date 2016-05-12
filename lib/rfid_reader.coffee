@@ -26,7 +26,7 @@ class RFIDReader
 
   socket: null
 
-  port: "/dev/tty-usbserial1"
+  port: "COM5" #"/dev/tty-usbserial1"
 
   baudRate: 9600
 
