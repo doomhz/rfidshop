@@ -45,8 +45,9 @@ module.exports = (app)->
     existentProduct = _.find products, (p)->
       p.code is code
     return res.status(409).json {error: "This product code already exists."}  if existentProduct
+    lastId = _.last(products).id
     product = 
-      id: ++_.last(products).id
+      id: ++lastId
       name: name
       code: code
       status: "available"
@@ -57,17 +58,17 @@ module.exports = (app)->
     id = parseInt req.params.id
     name = req.body.name
     code = req.body.code
-    return resstatus(409).json {error: "Wrong product id."}  if not _.isNumber id
+    return res.status(409).json {error: "Wrong product id."}  if not _.isNumber id
     existentProduct = _.find products, (p)->
       p.id is id
-    return resstatus(409).json {error: "Product doesn't exist."}  if not existentProduct
+    return res.status(409).json {error: "Product doesn't exist."}  if not existentProduct
     existentProduct.name = name
     existentProduct.code = code
     res.json existentProduct
 
   app.delete "/products/:id", (req, res)->
     id = parseInt req.params.id
-    return resstatus(409).json {error: "Wrong product id."}  if not _.isNumber id
+    return res.status(409).json {error: "Wrong product id."}  if not _.isNumber id
     products = _.reject products, (p)->
       p.id is id
     res.json {}

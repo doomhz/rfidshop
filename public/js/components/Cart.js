@@ -1,12 +1,13 @@
 import React from 'react'
-import {Link} from 'react-router'
+import {Link, browserHistory} from 'react-router'
 import ProductModel from '../models/ProductModel'
+import PaymentModel from '../models/PaymentModel'
 
 let socket = null
 
 class Cart extends React.Component {
-  constructor(){
-    super()
+  constructor(props){
+    super(props)
     this.state = {
       products: [],
       error: "",
@@ -47,13 +48,25 @@ class Cart extends React.Component {
     setTimeout(()=> this.setState({canPay: true})
       , 1000)
   }
+  afterPaymentSubmit(result){
+    browserHistory.push(`pay/${result.data.id}`)
+  }
+  onPaymentSubmitError(response){
+    this.setState({error: response.data.error})
+    setTimeout(()=> this.setState({error: ""})
+      , 3000)
+  }
   onPay(e){
     e.preventDefault()
-    this.setState({isScanning: false})
+    PaymentModel.save({products: this.state.products})
+    .then(this.afterPaymentSubmit.bind(this))
+    .catch(this.onPaymentSubmitError.bind(this))
   }
   render(){
     return (
       <div>
+        <div className="alert alert-danger" role="alert" style={!this.state.error ? {'display':'none'} : {}}>{this.state.error}</div>
+        <div className="alert alert-success" role="alert" style={!this.state.info ? {'display':'none'} : {}}>{this.state.info}</div>
         <div className="alert alert-info" role="alert" style={this.state.isScanning ? {'display':'none'} : {}}>
           Please, place your products on the scanner and then press the SCAN button bellow.
         </div>
