@@ -1,6 +1,7 @@
 module.exports = (app)->
   
   app.use (req, res)->
+    return res.render "site/index"
     title = "Page not found"
     description = "Page not found"
     res.statusCode = 404
