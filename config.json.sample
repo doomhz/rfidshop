@@ -2,6 +2,15 @@
   "development" : {
     "app_url": "http://localhost:5000",
     "app_host": "localhost:5000",
+    "mysql": {
+      "database": "rfidshop_dev",
+      "db": "rfidshop_dev",
+      "user": "root",
+      "password": "",
+      "port": 3306,
+      "host": "localhost",
+      "logging": true
+    },
     "session": {
       "cookie_secret": "secretkey",
       "session_key": "rfidshop",
@@ -16,6 +25,15 @@
   "test" : {
     "app_url": "http://localhost:5000",
     "app_host": "localhost:5000",
+    "mysql": {
+      "database": "rfidshop_test",
+      "db": "rfidshop_test",
+      "user": "root",
+      "password": "",
+      "port": 3306,
+      "host": "localhost",
+      "logging": true
+    },
     "session": {
       "cookie_secret": "secretkey",
       "session_key": "rfidshop",
@@ -30,6 +48,15 @@
   "production" : {
     "app_url": "http://localhost:5000",
     "app_host": "localhost:5000",
+    "mysql": {
+      "database": "rfidshop",
+      "db": "rfidshop",
+      "user": "root",
+      "password": "",
+      "port": 3306,
+      "host": "localhost",
+      "logging": true
+    },
     "session": {
       "cookie_secret": "secretkey",
       "session_key": "rfidshop",

@@ -12,6 +12,7 @@ var environment       = process.env.NODE_ENV || 'development';
 
 // Configure globals
 GLOBAL.appConfig = require("./config/config");
+GLOBAL.db        = require('./models/index');
 
 require('date-utils');
 
