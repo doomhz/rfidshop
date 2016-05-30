@@ -12,7 +12,8 @@ class Cart extends React.Component {
       products: [],
       error: "",
       info: "",
-      isScanning: false
+      isScanning: false,
+      total: 0
     }
   }
   componentDidMount(){
@@ -39,8 +40,14 @@ class Cart extends React.Component {
     if (this.getProduct(data.data.code)) return;
     this.state.products.push(data.data)
     this.setState({products: this.state.products})
+    this.calculateTotal()
   }
   onAvailableProductError(){
+  }
+  calculateTotal(){
+    let total = 0;
+    this.state.products.forEach((p)=> total += p.price)
+    this.setState({total: total})
   }
   onStartScan(e){
     e.preventDefault()
@@ -81,6 +88,7 @@ class Cart extends React.Component {
             <tr>
               <th>Name</th>
               <th>Code</th>
+              <th>Price</th>
             </tr>
           </thead>
           <tbody>
@@ -88,8 +96,14 @@ class Cart extends React.Component {
               <tr key={index}>
                 <td>{product.name}</td>
                 <td>{product.code}</td>
+                <td>{product.price} EUR</td>
               </tr>
             ))}
+            <tr key="total">
+              <td><b>Total</b></td>
+              <td></td>
+              <td><b>{this.state.total} EUR</b></td>
+            </tr>
           </tbody>
         </table>
         <div className="row">

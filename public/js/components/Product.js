@@ -11,7 +11,8 @@ class Product extends React.Component {
       product: {
         id: undefined,
         name: "",
-        code: ""
+        code: "",
+        price: ""
       },
       error: "",
       info: "",
@@ -61,6 +62,10 @@ class Product extends React.Component {
     this.state.product.name = e.target.value
     this.setState({product: this.state.product})
   }
+  handlePriceChange(e) {
+    this.state.product.price = parseFloat(e.target.value)
+    this.setState({product: this.state.product})
+  }
   handleCodeChange(e) {
     this.state.product.code = e.target.value
     this.setState({product: this.state.product})
@@ -88,6 +93,10 @@ class Product extends React.Component {
           <div className="form-group">
             <label for="name">Name</label>
             <input type="text" value={this.state.product.name} onChange={this.handleNameChange.bind(this)} className="form-control" placeholder="Name" />
+          </div>
+          <div className="form-group">
+            <label for="name">Price</label>
+            <input type="text" value={this.state.product.price} onChange={this.handlePriceChange.bind(this)} className="form-control" placeholder="Price" />
           </div>
           <div className="form-group">
             <label for="name">Code</label>

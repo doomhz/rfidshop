@@ -39,7 +39,8 @@ module.exports = (app)->
   app.post "/products", (req, res)->
     name = req.body.name
     code = req.body.code
-    Product.create({name: name, code: code})
+    price = parseFloat req.body.price
+    Product.create({name: name, code: code, price: price})
     .then (product)->
       res.json product
     .error (e)->
@@ -50,12 +51,14 @@ module.exports = (app)->
     id = parseInt req.params.id
     name = req.body.name
     code = req.body.code
+    price = parseFloat req.body.price
     return res.status(409).json {error: "Wrong product id."}  if not _.isNumber id
     Product.findOne({where: {code: code}})
     .then (existentProduct)->
       return res.status(409).json {error: "Product doesn't exist."}  if not existentProduct
       existentProduct.name = name
       existentProduct.code = code
+      existentProduct.price = price
       existentProduct.save().then (p)->
         res.json existentProduct
 

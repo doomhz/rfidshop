@@ -1,4 +1,5 @@
-_ = require "underscore"
+math = require "mathjs"
+_    = require "underscore"
 
 PRODUCT_STATUS =
   available: 1
@@ -21,5 +22,15 @@ AppHelper =
 
   getPaymentStatusLiteral: (status)->
     _.invert(PAYMENT_STATUS)[status]
+
+  toBignum: (value)->
+    math.bignumber "#{value}"
+
+  toBigint: (value)->
+    parseInt math.multiply(@toBignum(value), @toBignum(100))
+
+  fromBigint: (value)->
+    parseFloat math.divide(@toBignum(value), @toBignum(100))
+
 
 exports = module.exports = AppHelper

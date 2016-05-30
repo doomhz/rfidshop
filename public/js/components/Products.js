@@ -70,6 +70,7 @@ class Products extends React.Component {
             <tr>
               <th>Name</th>
               <th>Code</th>
+              <th>Price</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -79,6 +80,7 @@ class Products extends React.Component {
               <tr key={index}>
                 <td>{product.name}</td>
                 <td>{product.code}</td>
+                <td>{product.price} EUR</td>
                 <td>{product.status}</td>
                 <td>
                   <Link className="btn btn-default" to={`/edit-product/${product.id}`}>Edit</Link><span> </span>

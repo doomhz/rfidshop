@@ -18,6 +18,10 @@ module.exports = (sequelize, DataTypes) ->
         type: DataTypes.BIGINT
         defaultValue: 0
         allowNull: false
+        get: ()->
+          AppHelper.fromBigint @getDataValue("price")
+        set: (price)->
+          @setDataValue "price", AppHelper.toBigint price
       status:
         type: DataTypes.INTEGER.UNSIGNED
         allowNull: false

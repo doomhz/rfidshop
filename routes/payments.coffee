@@ -19,7 +19,12 @@ module.exports = (app)->
     .then (payment)->
       payment.addProducts(products)
       .then (payment)->
-        res.json payment
+        payment.getProducts()
+        .then (products)->
+          _.each products, (p)->
+            payment.total += p.price
+          payment.save().then (payment)->
+            res.json payment
   
   app.put "/payments/:id", (req, res)->
     id = parseInt req.params.id

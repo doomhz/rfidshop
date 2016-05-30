@@ -74,7 +74,7 @@ class Payment extends React.Component {
             <label for="name">Card number</label>
             <input type="text" value={this.state.payment.card_number} onChange={this.handleCardNumberChange.bind(this)} className="form-control" placeholder="Card number" />
           </div>
-          <button type="submit" className="btn btn-success btn-block">Pay</button>
+          <button type="submit" className="btn btn-success btn-block">Pay {this.state.payment.total} EUR</button>
         </form>
       </div>
     )
